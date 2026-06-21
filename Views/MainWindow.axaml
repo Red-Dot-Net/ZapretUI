@@ -1,0 +1,112 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ZapretUI.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="using:ZapretUI.Views"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="380"
+        x:Class="ZapretUI.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/open-lock.png"
+        Title="ZapretUI"
+        Width="1000"
+        Height="520"
+        Background="#090e0f">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+        to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.Styles>
+            <Style Selector="Button">
+                <Setter Property="Background" Value="#115169"></Setter>
+                <Setter Property="Foreground" Value="White"></Setter>
+            </Style>
+            <Style Selector="TextBlock">
+                <Setter Property="Foreground" Value="White"></Setter>
+            </Style>
+
+        </Grid.Styles>
+        <Border Grid.Column="0"
+                CornerRadius="0,2,2,0"
+                BorderBrush="#10242b"
+                BorderThickness="3"
+                Width="200"
+                HorizontalAlignment="Left">
+            <StackPanel Background="#10242b">
+                <StackPanel.Styles>
+                    <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="#13799e" />
+                        <Setter Property="Foreground" Value="white" />
+                    </Style>
+                </StackPanel.Styles>
+                <Border BorderBrush="#134c61"
+                        BorderThickness="0 0 0 2"
+                        Margin="5 10 5 0"
+                        Padding="0 0 0 10">
+                    <Button Command="{Binding SwitchToLaunchWindowCommand}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            CornerRadius="10"
+                            Padding="5,10,5,10"
+                            FontSize="22">Launch</Button>
+                </Border>
+                <Border BorderBrush="#134c61"
+                        BorderThickness="0,0,0,2"
+                        Margin="5 10 5 0"
+                        Padding="0 0 0 10">
+                    <Button Command="{Binding SwitchToSettingWindowCommand}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            CornerRadius="10"
+                            Padding="5,10,5,10"
+                            FontSize="22">Setting</Button>
+                </Border>
+                <Border BorderBrush="#134c61"
+                        BorderThickness="0"
+                        Margin="5 10 5 0"
+                        Padding="0 0 0 10">
+                    <Button Command="{Binding SwitchToUpdateWindowCommand}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            CornerRadius="10"
+                            Padding="5,10,5,10"
+                            FontSize="22">Update</Button>
+                </Border>
+            </StackPanel>
+        </Border>
+        <Grid Grid.Column="1"
+              RowDefinitions="Auto, *"
+              ColumnDefinitions="Auto, *">
+            <TextBlock Grid.Column="1"
+                       Text="{Binding CurrentLoadedVersion}"
+                       HorizontalAlignment="Stretch"
+                       TextAlignment="Center"
+                       Padding="5"
+                       FontSize="14" />
+            <ContentControl Content="{Binding CurrentView}"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            HorizontalAlignment="Stretch">
+                <ContentControl.DataTemplates>
+                    <DataTemplate DataType="vm:SettingsWindowViewModel">
+                        <views:SettingsWindow />
+                    </DataTemplate>
+                    <DataTemplate DataType="vm:LaunchWindowViewModel">
+                        <views:LaunchWindow />
+                    </DataTemplate>
+                    <DataTemplate DataType="vm:UpdateWindowViewModel">
+                        <views:UpdateWindow />
+                    </DataTemplate>
+                </ContentControl.DataTemplates>
+            </ContentControl>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,100 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ZapretUI.ViewModels"
+             x:Class="ZapretUI.Views.SettingsWindow"
+             x:DataType="vm:SettingsWindowViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#cacfcc"/>
+            <Setter Property="Background" Value="#cacfcc" />
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#cacfcc"/>
+            <Setter Property="BorderBrush" Value="#cacfcc"/>
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+
+        <Style Selector="Button">
+            <Setter Property="Background" Value="#115169" />
+            <Setter Property="Foreground" Value="white" />
+        </Style>
+        <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#13799e" />
+            <Setter Property="TextBlock.Foreground" Value="White" />
+        </Style>
+    </UserControl.Styles>
+
+    <StackPanel Margin="20"
+                Spacing="10">
+        <TextBlock Text="Путь к корневой папке"
+                   Margin="20 0 0 0"
+                   FontSize="14"
+                   FontWeight="Bold"
+                   Foreground="White"/>
+        <StackPanel Orientation="Horizontal"
+                    Margin="20 0 0 0">
+            <TextBox MinWidth="200"
+                     BorderThickness="0"
+                     Background="#cacfcc"
+                     Foreground="Black"
+                     Text="{Binding FolderText}">
+            </TextBox>
+            <Button Margin="20,0,0,0"
+                    Command="{Binding OpenFileExplorerCommand}"
+                    Content="Выбрать"
+                    HorizontalAlignment="Left"/>
+            <Image Source="avares://ZapretUI/Assets/check-mark.png"
+                   IsVisible="{Binding IsCheckboxVisible}"
+                   Margin="20 0 0 0"
+                   Height="30"/>
+        </StackPanel>
+        <Button Command="{Binding ScanAndSaveStrategiesCommand}"
+                Content="Загрузить стратегии"
+                Margin="20 20 0 0"
+                HorizontalAlignment="Left"/>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Выбрана стратегия:"
+                       Margin="20 0 0 0"
+                       FontWeight="Bold"
+                       Foreground="White"/>
+            <TextBlock Margin="20 0 0 0"
+                       Text="{Binding InfoText}"
+                       Foreground="White"/>
+        </StackPanel>
+        <TextBlock Text="Загруженные стратегии:"
+                   FontWeight="Bold"
+                   Foreground="White"
+                   Margin="20 0 0 0"/>
+        <Border Margin="20 20 0 0"
+                MaxHeight="220"
+                Width="400"
+                HorizontalAlignment="Left"
+                CornerRadius="3"
+                BorderBrush="#134c61"
+                BorderThickness="2">
+            <ScrollViewer VerticalScrollBarVisibility="Visible"
+                          HorizontalScrollBarVisibility="Hidden">
+
+                <ScrollViewer.Styles>
+                    <Style Selector="ScrollViewer">
+                        <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
+                        <Setter Property="ScrollViewer.IsScrollInertiaEnabled" Value="False" />
+                    </Style>
+                </ScrollViewer.Styles>
+
+
+                <ListBox ItemsSource="{Binding StrategyNames}"
+                         SelectedItem="{Binding SelectedStrategyName, Mode=TwoWay}"
+                         Background="#102a33"
+                         >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+        </Border>
+    </StackPanel>
+</UserControl>

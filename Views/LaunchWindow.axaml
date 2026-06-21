@@ -1,0 +1,47 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ZapretUI.ViewModels"
+             x:Class="ZapretUI.Views.LaunchWindow"
+             x:DataType="vm:LaunchWindowViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="Button">
+            <Setter Property="Background" Value="#115169" />
+        </Style>
+        <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#13799e" />
+            <Setter Property="TextBlock.Foreground" Value="White" />
+        </Style>
+    </UserControl.Styles>
+
+    <StackPanel HorizontalAlignment="Center"
+                Margin="40 20 40 0">
+        <TextBlock Text="{Binding SelectedStrategyName}"
+                   HorizontalAlignment="Center"
+                   FontSize="18"
+                   FontWeight="Bold"
+                   Foreground="#13799e"/>
+        <Button Command="{Binding LaunchCommand}"
+                Content="Запуск"
+                Width="250"
+                Height="100"
+                Margin="0 40 0 0"
+                HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                FontSize="40"
+                FontWeight="Bold"/>
+        <Border IsVisible="{Binding IsOperationResultBorderVisible}"
+                BorderThickness="3"
+                BorderBrush="#13799e"
+                Background="#115169"
+                CornerRadius="2"
+                Margin="0 20 0 20">
+            <TextBlock Text="{Binding OperationResultMessage}"
+                       Foreground="Red"
+                       TextWrapping="Wrap"
+                       Margin="10 5 10 5"
+                       FontSize="18"/>
+        </Border>
+    </StackPanel>
+</UserControl>
