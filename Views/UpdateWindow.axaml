@@ -26,85 +26,110 @@
         </Style>
     </UserControl.Styles>
 
-    <StackPanel Margin="40 0 40 0"
-                Spacing="10">
-        <TextBlock Text="{Binding CurrentLoadedVersion}"/>
-        <TextBlock Text="{Binding CurrentServerVersion}"/>
-        <StackPanel Orientation="Horizontal">
-            <Button Command="{Binding CheckForNewVersionCommand}"
+    <ScrollViewer>
+        <StackPanel Margin="40 0 40 0"
+                    Spacing="10">
+            <TextBlock Text="{Binding CurrentLoadedVersion}"/>
+            <TextBlock Text="{Binding CurrentServerVersion}"/>
+            <StackPanel Orientation="Horizontal">
+                <Button Command="{Binding CheckForNewVersionCommand}"
+                        HorizontalAlignment="Center"
+                        Content="Проверить новую версию"
+                        FontSize="20"
+                        Padding="10"/>
+                <Button Command="{Binding GetDownloadInfoCommand}"
+                        Content="Показать ссылку на скачивание"
+                        HorizontalAlignment="Center"
+                        Margin="20 0 0 0"
+                        FontSize="20"
+                        Padding="10"/>
+            </StackPanel>
+            <TextBlock Text="{Binding DownloadUrlErrorMessage}"
+                       IsVisible="{Binding IsDownloadErrorTextVisible}"/>
+            <Border IsVisible="{Binding IsDownloadPanelVisible}"
+                    CornerRadius="5"
+                    BorderThickness="3"
+                    BorderBrush="#115169"
+                    Padding="2">
+                <StackPanel>
+                    <HyperlinkButton Content="Ссылка на скачивание архива"
+                                     NavigateUri="{Binding DownloadUrl}"
+                                     HorizontalAlignment="Center"
+                                     Margin="0 5 0 0"
+                                     FontSize="20"
+                                     Foreground="white"/>
+                    <TextBlock Text="{Binding DownloadUrl}"
+                               HorizontalAlignment="Center"
+                               FontSize="12"
+                               Foreground="#13799e"/>
+                </StackPanel>
+            </Border>
+            <Border IsVisible="{Binding IsDownloadPanelVisible}"
+                    Height="150"
+                    Background="#115169"
+                    Padding="40"
+                    Margin="0 20 0 0"
+                    BorderThickness="3"
+                    CornerRadius="10"
+                    BorderBrush="#13799e"
+                    DragDrop.AllowDrop="True"
+                    DragDrop.DragOver="OnDragOver"
+                    DragDrop.Drop="OnDrop">
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock x:Name="DragAndDropInfoMessageBlock"
+                               Text="Перетащите архив в это окно"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="18"
+                               Foreground="white"/>
+                    <TextBlock x:Name="DragAndDropFileNameBlock"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               IsVisible="False"
+                               FontSize="18"
+                               Foreground="white"/>
+                </StackPanel>
+            </Border>
+            <Border IsVisible="{Binding IsInfoTextVisible}"
+                    BorderThickness="3"
+                    BorderBrush="#13799e"
+                    CornerRadius="3">
+                <TextBlock Text="{Binding InfoText}"
+                           Margin="5"
+                           MaxWidth="300"
+                           TextWrapping="Wrap"
+                           Foreground="red"/>
+            </Border>
+            <Button IsVisible="{Binding IsUpdateButtonVisible}"
+                    Command="{Binding UpdateCommand}"
+                    Content="Обновить"
                     HorizontalAlignment="Center"
-                    Content="Проверить новую версию"
-                    FontSize="20"
-                    Padding="10"/>
-            <Button Command="{Binding GetDownloadInfoCommand}"
-                    Content="Показать ссылку на скачивание"
+                    Margin="0 20 0 0"
+                    Padding="15"
+                    FontSize="25"/>
+            <Button Command="{Binding CheckIpListCommand}"
+                    Content="Проверить актуальность IP адресов"
                     HorizontalAlignment="Center"
-                    Margin="20 0 0 0"
-                    FontSize="20"
-                    Padding="10"/>
+                    Margin="0 30 0 0"
+                    Padding="10"
+                    FontSize="16"/>
+            <Border IsVisible="{Binding IsUpdateListInfoVisible}"
+                    BorderThickness="3"
+                    BorderBrush="#13799e"
+                    Background="#115169"
+                    CornerRadius="3"
+                    Padding="10">
+                <TextBlock Text="{Binding UpdateListInfo}"
+                           TextWrapping="Wrap"
+                           Foreground="White"/>
+            </Border>
+            <Button Command="{Binding UpdateListCommand}"
+                    IsVisible="{Binding IsUpdateListButtonVisible}"
+                    Content="Обновить список IP адресов"
+                    HorizontalAlignment="Center"
+                    Margin="0 5 0 10"
+                    Padding="10"
+                    FontSize="16"/>
         </StackPanel>
-        <TextBlock Text="{Binding DownloadUrlErrorMessage}"
-                   IsVisible="{Binding IsDownloadErrorTextVisible}"/>
-        <Border IsVisible="{Binding IsDownloadPanelVisible}"
-                CornerRadius="5"
-                BorderThickness="3"
-                BorderBrush="#115169"
-                Padding="2">
-            <StackPanel>
-                <HyperlinkButton Content="Ссылка на скачивание архива"
-                                 NavigateUri="{Binding DownloadUrl}"
-                                 HorizontalAlignment="Center"
-                                 Margin="0 5 0 0"
-                                 FontSize="20"
-                                 Foreground="white"/>
-                <TextBlock Text="{Binding DownloadUrl}"
-                           HorizontalAlignment="Center"
-                           FontSize="12"
-                           Foreground="#13799e"/>
-            </StackPanel>
-        </Border>
-        <Border IsVisible="{Binding IsDownloadPanelVisible}"
-                Height="150"
-                Background="#115169"
-                Padding="40"
-                Margin="0 20 0 0"
-                BorderThickness="3"
-                CornerRadius="10"
-                BorderBrush="#13799e"
-                DragDrop.AllowDrop="True"
-                DragDrop.DragOver="OnDragOver"
-                DragDrop.Drop="OnDrop">
-            <StackPanel VerticalAlignment="Center">
-                <TextBlock x:Name="DragAndDropInfoMessageBlock"
-                           Text="Перетащите архив в это окно"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           FontSize="18"
-                           Foreground="white"/>
-                <TextBlock x:Name="DragAndDropFileNameBlock"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           IsVisible="False"
-                           FontSize="18"
-                           Foreground="white"/>
-            </StackPanel>
-        </Border>
-        <Border IsVisible="{Binding IsInfoTextVisible}"
-                BorderThickness="3"
-                BorderBrush="#13799e"
-                CornerRadius="3">
-            <TextBlock Text="{Binding InfoText}"
-                       Margin="5"
-                       MaxWidth="300"
-                       TextWrapping="Wrap"
-                       Foreground="red"/>
-        </Border>
-        <Button IsVisible="{Binding IsUpdateButtonVisible}"
-                Command="{Binding UpdateCommand}"
-                Content="Обновить"
-                HorizontalAlignment="Center"
-                Margin="0 20 0 0"
-                Padding="15"
-                FontSize="25"/>
-    </StackPanel>
+    </ScrollViewer>
 </UserControl>

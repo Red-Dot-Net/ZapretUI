@@ -18,7 +18,6 @@ namespace ZapretUI
     {
         public static TopLevel? AppTopLevel { get; private set; }
         public static string AppFolderName { get; private set; } = string.Empty;
-        public static string SourceFilesBaseDirectory { get; private set; } = string.Empty;
         public static DataStorageService DataStorageService { get; private set; } = new();
         public static List<Strategy> LoadedStrategies { get; private set; } = [];
         public static List<Process> ChildProcesses { get; private set; } = [];
@@ -32,8 +31,6 @@ namespace ZapretUI
             AvaloniaXamlLoader.Load(this);
 
             AppFolderName = "ZapretUI";
-            //SourceFilesBaseDirectory = Directory.GetParent(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).FullName).FullName;
-            SourceFilesBaseDirectory = "C:\\Users\\Adminka\\Desktop\\xxxv";
 
             var handler = new SocketsHttpHandler
             {

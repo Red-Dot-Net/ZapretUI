@@ -1,0 +1,73 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ZapretUI.ViewModels"
+             x:Class="ZapretUI.Views.ListsWindow"
+             x:DataType="vm:ListsWindowViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="white" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Background" Value="#115169" />
+            <Setter Property="Foreground" Value="white" />
+        </Style>
+        <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#13799e" />
+            <Setter Property="TextBlock.Foreground" Value="White" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="40 0 40 0"
+                    HorizontalAlignment="Center">
+            <TextBlock Text="Дополнительные настройки"
+                       HorizontalAlignment="Center"
+                       FontSize="24"
+                       FontWeight="Bold"/>
+            <TextBlock Text="Для корректной работы ресурсов требуется добавить записи в файл hosts. Скачайте актульные адреса и добавьте их в конец файла hosts."
+                       Margin="0 20 0 0"
+                       FontSize="16"
+                       TextWrapping="Wrap"/>
+            <Button Command="{Binding LoadHostsFromGitHubCommand}"
+                    Content="Скачать списки адресов"
+                    HorizontalAlignment="Center"
+                    Margin="0 10 0 0"
+                    Padding="10"
+                    FontSize="16"/>
+            <StackPanel IsVisible="{Binding IsHostsLoaded}">
+                <Border HorizontalAlignment="Center"
+                        Margin="0 10 0 0"
+                        BorderThickness="3"
+                        BorderBrush="#13799e"
+                        Background="#115169"
+                        CornerRadius="3">
+                    <StackPanel>
+                        <Button Command="{Binding SaveToBufferCommand}"
+                                Content="Скопировать в буфер обмена"
+                                HorizontalAlignment="Stretch"
+                                FontSize="16"
+                                Height="40"
+                                CornerRadius="0"
+                                BorderThickness="0 0 0 2"
+                                BorderBrush="White"
+                                VerticalContentAlignment="Center"
+                                HorizontalContentAlignment="Center"/>
+                        <ScrollViewer MaxHeight="100">
+                            <SelectableTextBlock Text="{Binding HostsAdreses}"
+                                                 Margin="10 5"
+                                                 TextWrapping="NoWrap"
+                                                 Foreground="White"/>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+                <Button Command="{Binding OpenHostsDirectoryCommand}"
+                        Content="Открыть папку с фалом hosts"
+                        HorizontalAlignment="Center"
+                        Margin="0 10 0 0"
+                        Padding="10"
+                        FontSize="16"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -14,10 +14,10 @@ public partial class SettingsWindowViewModel : ViewModelBase
     readonly DataStorageService _dataStorageService;
 
     [ObservableProperty]
-    public partial object FolderText { get; set; }
+    public partial string? FolderText { get; set; }
 
     [ObservableProperty]
-    public partial object InfoText {  get; set; }
+    public partial string? InfoText {  get; set; }
 
     [ObservableProperty]
     public partial bool IsCheckboxVisible { get; set; }
@@ -105,7 +105,7 @@ public partial class SettingsWindowViewModel : ViewModelBase
         }
     }
 
-    partial void OnFolderTextChanged(object value)
+    partial void OnFolderTextChanged(string? value)
     {
         if (value is string text &&
             !string.IsNullOrEmpty(text) &&

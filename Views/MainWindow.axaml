@@ -56,7 +56,7 @@
                             HorizontalContentAlignment="Center"
                             CornerRadius="10"
                             Padding="5,10,5,10"
-                            FontSize="22">Launch</Button>
+                            FontSize="22">Запуск</Button>
                 </Border>
                 <Border BorderBrush="#134c61"
                         BorderThickness="0,0,0,2"
@@ -67,10 +67,10 @@
                             HorizontalContentAlignment="Center"
                             CornerRadius="10"
                             Padding="5,10,5,10"
-                            FontSize="22">Setting</Button>
+                            FontSize="22">Настройки</Button>
                 </Border>
                 <Border BorderBrush="#134c61"
-                        BorderThickness="0"
+                        BorderThickness="0,0,0,2"
                         Margin="5 10 5 0"
                         Padding="0 0 0 10">
                     <Button Command="{Binding SwitchToUpdateWindowCommand}"
@@ -78,7 +78,18 @@
                             HorizontalContentAlignment="Center"
                             CornerRadius="10"
                             Padding="5,10,5,10"
-                            FontSize="22">Update</Button>
+                            FontSize="22">Обновление</Button>
+                </Border>
+                <Border BorderBrush="#134c61"
+                        BorderThickness="0"
+                        Margin="5 10 5 0"
+                        Padding="0 0 0 10">
+                    <Button Command="{Binding SwitchToListsWindowCommand}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            CornerRadius="10"
+                            Padding="5,10,5,10"
+                            FontSize="22">Списки</Button>
                 </Border>
             </StackPanel>
         </Border>
@@ -104,6 +115,9 @@
                     </DataTemplate>
                     <DataTemplate DataType="vm:UpdateWindowViewModel">
                         <views:UpdateWindow />
+                    </DataTemplate>
+                    <DataTemplate DataType="vm:ListsWindowViewModel">
+                        <views:ListsWindow />
                     </DataTemplate>
                 </ContentControl.DataTemplates>
             </ContentControl>

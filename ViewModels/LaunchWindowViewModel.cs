@@ -50,13 +50,20 @@ public partial class LaunchWindowViewModel : ViewModelBase
             return;
         }
 
+        var basePath = _dataStorageService.ExternalLibraryResources.FolderPath;
+        if (string.IsNullOrEmpty(basePath))
+        {
+            OperationResultMessage = "Ошибка: Путь к корневой папке не указан";
+            return;
+        }
+
         if (!ExternalApplicationService.AreTcpTimestampsEnabled())
         {
             ExternalApplicationService.EnableTcpTimestamps();
         }
 
         ExternalApplicationService.KillExistingProcesses("winws");
-        var launchProcessResult = await ExternalApplicationService.Launch(App.SourceFilesBaseDirectory, strategy);
+        var launchProcessResult = await ExternalApplicationService.Launch(basePath, strategy);
 
         if (launchProcessResult is Success success && success.Value is Process process)
         {

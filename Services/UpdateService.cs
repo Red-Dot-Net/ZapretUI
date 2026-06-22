@@ -13,9 +13,15 @@ public static class UpdateService
         if (storageProvider == null)
             return new Error("Ошибка инициализации приложения");
 
+        var basePath = App.DataStorageService.ExternalLibraryResources.FolderPath;
+        if (string.IsNullOrEmpty(basePath))
+        {
+            return new Error("Ошибка: Путь к корневой папке не указан");
+        }
+
         try
         {
-            var destFolderPath = Path.Combine(App.SourceFilesBaseDirectory, "temp");
+            var destFolderPath = Path.Combine(basePath, "temp");
             Directory.CreateDirectory(destFolderPath);
 
             await using var stream = await zipFile.OpenReadAsync();

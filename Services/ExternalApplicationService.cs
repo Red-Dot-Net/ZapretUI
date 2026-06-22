@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using ZapretUI.Helpers;
 using ZapretUI.Models;
@@ -16,14 +15,8 @@ public static class ExternalApplicationService
         string binPath = Path.Combine(appBaseDirectory, "bin") + "\\";
         string winwsPath = Path.Combine(binPath, "winws.exe");
 
-        var strBuilder = new StringBuilder();
-
         if (!File.Exists(winwsPath))
-        {
-            strBuilder.Clear();
-            strBuilder.Append($"Исполняемый файл winws.exe (URI: {winwsPath}) не найден. Приложение не может быть запущено");
-            return new Error(strBuilder.ToString());
-        }
+            return new Error($"Исполняемый файл winws.exe (URI: {winwsPath}) не найден. Приложение не может быть запущено");
 
         string arguments = strategy.Arguments;
 
@@ -41,47 +34,23 @@ public static class ExternalApplicationService
         {
             Process? process = Process.Start(startInfo);
 
+            await Task.Delay(2000);
+
             if (process == null)
-            {
                 return new Error("Попытка запуска приложения winws.exe вызвала ошибку.");
-            }
 
-            strBuilder.Clear();
-            strBuilder.Append("Успешно запущен.");
-            return new Success(process, strBuilder.ToString());
+            if (Process.GetProcessesByName("winws").Length < 1)
+                return new Error("Попытка запуска приложения winws.exe вызвала ошибку.");
 
-            //Task<string> errorTask = process.StandardError.ReadToEndAsync();
-            //Task timeoutTask = Task.Delay(2000);
-            //Task completedTask = await Task.WhenAny(errorTask, timeoutTask);
-
-            //if (completedTask == errorTask)
-            //{
-            //    string error = await errorTask;
-            //    if (!string.IsNullOrEmpty(error))
-            //    {
-            //        return new Error($"Попытка запуска приложения winws.exe вызвала ошибку с сообщением {error}");
-            //    }
-            //}
-            //else
-            //{
-            //    strBuilder.Clear();
-            //    strBuilder.Append("Успешно запущен.");
-            //    return new Success(process, strBuilder.ToString());
-            //}
-
-            //return new Error("Попытка запуска приложения winws.exe вызвала ошибку.");
+            return new Success(process, "Успешно запущен.");
         }
         catch (Win32Exception ex) when (ex.NativeErrorCode == 1223)
         {
-            strBuilder.Clear();
-            strBuilder.Append($"Попытка запуска приложения winws.exe вызвала ошибку: {ex.Message}");
-            return new Error(strBuilder.ToString());
+            return new Error($"Попытка запуска приложения winws.exe вызвала ошибку: {ex.Message}");
         }
         catch (Exception ex)
         {
-            strBuilder.Clear();
-            strBuilder.Append($"Попытка запуска приложения winws.exe вызвала ошибку: {ex.Message}");
-            return new Error(strBuilder.ToString());
+            return new Error($"Попытка запуска приложения winws.exe вызвала ошибку: {ex.Message}");
         }
     }
 

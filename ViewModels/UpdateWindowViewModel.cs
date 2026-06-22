@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ public partial class UpdateWindowViewModel : ViewModelBase
 {
     readonly DataStorageService _dataStorageService;
     IStorageFile? _dropedFile;
+    string _ipListResponseBuffer = "";
 
     [ObservableProperty]
     public partial string? CurrentLoadedVersion { get; set; }
@@ -45,6 +47,15 @@ public partial class UpdateWindowViewModel : ViewModelBase
     [ObservableProperty]
     public partial bool IsInfoTextVisible { get; set; }
 
+    [ObservableProperty]
+    public partial string? UpdateListInfo { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsUpdateListInfoVisible { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsUpdateListButtonVisible { get; set; }
+
     public UpdateWindowViewModel()
     {
         _dataStorageService = App.DataStorageService;
@@ -54,10 +65,13 @@ public partial class UpdateWindowViewModel : ViewModelBase
         else
             CurrentServerVersion = $"Последняя версия на GitHub: {App.LoadedGitHubVersion}";
 
+        UpdateListInfo = "";
         IsDownloadPanelVisible = false;
         IsDownloadErrorTextVisible = false;
         IsUpdateButtonVisible = false;
         IsInfoTextVisible = false;
+        IsUpdateListButtonVisible = false;
+        IsUpdateListInfoVisible = false;
     }
 
     [RelayCommand]
@@ -211,9 +225,16 @@ public partial class UpdateWindowViewModel : ViewModelBase
             return;
         }
 
+        var basePath = _dataStorageService.ExternalLibraryResources.FolderPath;
+        if (string.IsNullOrEmpty(basePath))
+        {
+            InfoText = "Ошибка: Путь к корневой папке не указан";
+            return;
+        }
+
         try
         {
-            UpdateService.DeleteContents(App.SourceFilesBaseDirectory);
+            UpdateService.DeleteContents(basePath);
         }
         catch 
         {
@@ -223,8 +244,8 @@ public partial class UpdateWindowViewModel : ViewModelBase
 
         try
         {
-            var folderInArchive = Directory.GetDirectories(Path.Combine(App.SourceFilesBaseDirectory, "temp")).First();
-            UpdateService.CopyDirectory(folderInArchive, App.SourceFilesBaseDirectory);
+            var folderInArchive = Directory.GetDirectories(Path.Combine(basePath, "temp")).First();
+            UpdateService.CopyDirectory(folderInArchive, basePath);
         }
         catch 
         {
@@ -234,7 +255,7 @@ public partial class UpdateWindowViewModel : ViewModelBase
 
         try
         {
-            var dir = Path.Combine(App.SourceFilesBaseDirectory, "temp");
+            var dir = Path.Combine(basePath, "temp");
             Directory.Delete(dir, true);
         }
         catch 
@@ -244,6 +265,59 @@ public partial class UpdateWindowViewModel : ViewModelBase
         }
 
         InfoText = "Успешно обновлено";
+    }
+
+    [RelayCommand]
+    private async Task CheckIpList()
+    {
+        var httpClient = App.HttpClient;
+
+        var response = await httpClient.GetStringAsync("https://raw.githubusercontent.com/Flowseal/zapret-discord-youtube/refs/heads/main/.service/ipset-service.txt");
+        response = response.Replace("\r\n", "\n").Trim();
+        if (string.IsNullOrEmpty(response))
+        {
+            IsUpdateListInfoVisible = true;
+            UpdateListInfo = "Ошибка получения списка от сервера.";
+            return;
+        }
+
+        var ipList = await File.ReadAllTextAsync(Path.Combine(_dataStorageService.ExternalLibraryResources.FolderPath, "lists", "ipset-all.txt"));
+        ipList = ipList.Replace("\r\n", "\n").Trim();
+
+        if (string.Equals(ipList, response, StringComparison.OrdinalIgnoreCase))
+        {
+            IsUpdateListInfoVisible = true;
+            UpdateListInfo = "Списки идентичны.";
+            return;
+        }
+
+        _ipListResponseBuffer = response;
+        IsUpdateListInfoVisible = true;
+        IsUpdateListButtonVisible = true;
+        UpdateListInfo = "Содержимое файла ipset-all.txt отличается от актуального списка на сервере (https://raw.githubusercontent.com/Flowseal/zapret-discord-youtube/refs/heads/main/.service/ipset-service.txt).";
+    }
+
+    [RelayCommand]
+    private async Task UpdateList()
+    {
+        if (string.IsNullOrWhiteSpace(_ipListResponseBuffer))
+        {
+            IsUpdateListInfoVisible = true;
+            UpdateListInfo = "Не удалось скопировать содержимой в файл.";
+            return;
+        }
+
+        try
+        {
+            await File.WriteAllTextAsync(Path.Combine(_dataStorageService.ExternalLibraryResources.FolderPath, "lists", "ipset-all.txt"), _ipListResponseBuffer);
+            IsUpdateListInfoVisible = true;
+            UpdateListInfo = "Список успешно обновлен.";
+        }
+        catch
+        {
+            IsUpdateListInfoVisible = true;
+            UpdateListInfo = "Не удалось скопировать содержимой в файл.";
+        }
     }
 
     public void ChangeInfoText(string text)
@@ -257,7 +331,15 @@ public partial class UpdateWindowViewModel : ViewModelBase
 
         if (string.IsNullOrWhiteSpace(loadedVersion))
         {
-            var version = FileParserService.GetSourceVersion(App.SourceFilesBaseDirectory);
+            var basePath = _dataStorageService.ExternalLibraryResources.FolderPath;
+            if (string.IsNullOrEmpty(basePath))
+            {
+                CurrentLoadedVersion = $"Текущая версия:";
+                InfoText = "Ошибка: Путь к корневой папке не указан";
+                return;
+            }
+
+            var version = FileParserService.GetSourceVersion(basePath);
             if (version != null)
                 _dataStorageService?.SaveCurrentSourceVersion(version);
 
