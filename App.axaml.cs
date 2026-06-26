@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,10 +18,11 @@ namespace ZapretUI
     public partial class App : Application
     {
         public static TopLevel? AppTopLevel { get; private set; }
+        public static string ZapretFolderPath { get; private set; } = string.Empty;
         public static string AppFolderName { get; private set; } = string.Empty;
+        public static string AppFolderPath { get; private set; } = string.Empty;
         public static DataStorageService DataStorageService { get; private set; } = new();
         public static List<Strategy> LoadedStrategies { get; private set; } = [];
-        public static List<Process> ChildProcesses { get; private set; } = [];
         public static HttpClient HttpClient { get; private set; } = null!;
         public static string SaveFileName { get; private set; } = "ZapretUIData.json";
         public static string GitHubSourceDirectory { get; private set; } = "https://github.com/Flowseal/zapret-discord-youtube/releases/latest";
@@ -30,7 +32,12 @@ namespace ZapretUI
         {
             AvaloniaXamlLoader.Load(this);
 
-            AppFolderName = "ZapretUI";
+            DataContext = new ApplicationViewModel();
+
+            //AppFolderPath = AppContext.BaseDirectory;
+            AppFolderPath = "C:\\Users\\Adminka\\Desktop\\xxxv\\ZapretUI";
+            AppFolderName = new DirectoryInfo(AppFolderPath).Name;
+            ZapretFolderPath = new DirectoryInfo(AppFolderPath).Parent!.FullName;
 
             var handler = new SocketsHttpHandler
             {
@@ -59,7 +66,7 @@ namespace ZapretUI
 
                 AppTopLevel = TopLevel.GetTopLevel(desktop.MainWindow);
             }
-
+            
             base.OnFrameworkInitializationCompleted();
         }
     }

@@ -12,22 +12,17 @@ public static class ExternalApplicationService
 {
     public static async Task<Result> Launch(string appBaseDirectory, Strategy strategy)
     {
-        string binPath = Path.Combine(appBaseDirectory, "bin") + "\\";
-        string winwsPath = Path.Combine(binPath, "winws.exe");
+        string batPath = Path.Combine(appBaseDirectory, strategy.Name);
 
-        if (!File.Exists(winwsPath))
-            return new Error($"Исполняемый файл winws.exe (URI: {winwsPath}) не найден. Приложение не может быть запущено");
-
-        string arguments = strategy.Arguments;
+        if (!File.Exists(batPath))
+            return new Error($"Исполняемый bat файл (URI: {batPath}) не найден. Приложение не может быть запущено");
 
         ProcessStartInfo startInfo = new()
         {
-            FileName = winwsPath,
-            Arguments = arguments,
-            UseShellExecute = true,
+            FileName = "cmd.exe",
+            Arguments = $"/c \"{batPath}\"",
+            UseShellExecute = false,
             CreateNoWindow = true,
-            Verb = "runas",
-            WindowStyle = ProcessWindowStyle.Hidden
         };
 
         try
@@ -35,9 +30,6 @@ public static class ExternalApplicationService
             Process? process = Process.Start(startInfo);
 
             await Task.Delay(2000);
-
-            if (process == null)
-                return new Error("Попытка запуска приложения winws.exe вызвала ошибку.");
 
             if (Process.GetProcessesByName("winws").Length < 1)
                 return new Error("Попытка запуска приложения winws.exe вызвала ошибку.");

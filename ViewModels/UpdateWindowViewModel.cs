@@ -39,9 +39,6 @@ public partial class UpdateWindowViewModel : ViewModelBase
     public partial bool IsDownloadErrorTextVisible { get; set; }
 
     [ObservableProperty]
-    public partial string? DownloadFolderPath { get; set; }
-
-    [ObservableProperty]
     public partial string? InfoText { get; set; }
 
     [ObservableProperty]
@@ -158,59 +155,6 @@ public partial class UpdateWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task SetDownloadFolderPath()
-    {
-        if (App.AppTopLevel == null)
-            return;
-
-        var topLevel = App.AppTopLevel;
-        if (topLevel == null)
-            return;
-
-        IStorageFolder? prevSelection = null;
-        string? path = _dataStorageService.ExternalLibraryResources?.DownloadFolderPath;
-
-        if (path != null)
-        {
-            try
-            {
-                var uri = new Uri(path);
-                prevSelection = await topLevel.StorageProvider.TryGetFolderFromPathAsync(uri);
-            }
-            catch { }
-        }
-        else if (DownloadFolderPath is string txt && !string.IsNullOrWhiteSpace(txt))
-        {
-            try
-            {
-                var uri = new Uri(txt);
-                prevSelection = await topLevel.StorageProvider.TryGetFolderFromPathAsync(uri);
-            }
-            catch { }
-        }
-
-        var folderPickerOptions = new FolderPickerOpenOptions
-        {
-            Title = "Select your file",
-            AllowMultiple = false
-        };
-
-        if (prevSelection != null)
-        {
-            folderPickerOptions.SuggestedStartLocation = prevSelection;
-        }
-
-        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(folderPickerOptions);
-
-        if (folders == null || folders.Count == 0)
-            return;
-
-        DownloadFolderPath = folders[0].Path.LocalPath;
-
-        await _dataStorageService.SaveDownloadFolderPath(folders[0].Path.LocalPath);
-    }
-
-    [RelayCommand]
     private async Task Update()
     {
         if (_dropedFile == null)
@@ -225,7 +169,7 @@ public partial class UpdateWindowViewModel : ViewModelBase
             return;
         }
 
-        var basePath = _dataStorageService.ExternalLibraryResources.FolderPath;
+        var basePath = App.ZapretFolderPath;
         if (string.IsNullOrEmpty(basePath))
         {
             InfoText = "Ошибка: Путь к корневой папке не указан";
@@ -281,7 +225,7 @@ public partial class UpdateWindowViewModel : ViewModelBase
             return;
         }
 
-        var ipList = await File.ReadAllTextAsync(Path.Combine(_dataStorageService.ExternalLibraryResources.FolderPath, "lists", "ipset-all.txt"));
+        var ipList = await File.ReadAllTextAsync(Path.Combine(App.ZapretFolderPath, "lists", "ipset-all.txt"));
         ipList = ipList.Replace("\r\n", "\n").Trim();
 
         if (string.Equals(ipList, response, StringComparison.OrdinalIgnoreCase))
@@ -309,7 +253,7 @@ public partial class UpdateWindowViewModel : ViewModelBase
 
         try
         {
-            await File.WriteAllTextAsync(Path.Combine(_dataStorageService.ExternalLibraryResources.FolderPath, "lists", "ipset-all.txt"), _ipListResponseBuffer);
+            await File.WriteAllTextAsync(Path.Combine(App.ZapretFolderPath, "lists", "ipset-all.txt"), _ipListResponseBuffer);
             IsUpdateListInfoVisible = true;
             UpdateListInfo = "Список успешно обновлен.";
         }
@@ -331,7 +275,7 @@ public partial class UpdateWindowViewModel : ViewModelBase
 
         if (string.IsNullOrWhiteSpace(loadedVersion))
         {
-            var basePath = _dataStorageService.ExternalLibraryResources.FolderPath;
+            var basePath = App.ZapretFolderPath;
             if (string.IsNullOrEmpty(basePath))
             {
                 CurrentLoadedVersion = $"Текущая версия:";

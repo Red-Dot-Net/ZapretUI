@@ -1,9 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using ZapretUI.Helpers;
 using ZapretUI.Services;
 
 namespace ZapretUI.ViewModels;
@@ -50,25 +48,14 @@ public partial class LaunchWindowViewModel : ViewModelBase
             return;
         }
 
-        var basePath = _dataStorageService.ExternalLibraryResources.FolderPath;
+        var basePath = App.ZapretFolderPath;
         if (string.IsNullOrEmpty(basePath))
         {
             OperationResultMessage = "Ошибка: Путь к корневой папке не указан";
             return;
         }
 
-        if (!ExternalApplicationService.AreTcpTimestampsEnabled())
-        {
-            ExternalApplicationService.EnableTcpTimestamps();
-        }
-
-        ExternalApplicationService.KillExistingProcesses("winws");
         var launchProcessResult = await ExternalApplicationService.Launch(basePath, strategy);
-
-        if (launchProcessResult is Success success && success.Value is Process process)
-        {
-            App.ChildProcesses.Add(process);
-        }
         
         OperationResultMessage = launchProcessResult.Message;
     }

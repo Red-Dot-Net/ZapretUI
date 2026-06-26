@@ -36,9 +36,11 @@
                 BorderBrush="#13799e"
                 Background="#115169"
                 CornerRadius="2"
-                Margin="0 20 0 20">
+                Margin="0 20 0 20"
+                Padding="10">
             <TextBlock Text="{Binding OperationResultMessage}"
-                       Foreground="Red"
+                       HorizontalAlignment="Center"
+                       Foreground="White"
                        TextWrapping="Wrap"
                        Margin="10 5 10 5"
                        FontSize="18"/>

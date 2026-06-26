@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using System;
+using ZapretUI.Services;
 using ZapretUI.ViewModels;
 
 namespace ZapretUI.Views;
@@ -10,7 +10,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        Closing += OnClosing;
+        //Closing += OnClosing;
     }
 
     protected override void OnLoaded(RoutedEventArgs e)
@@ -21,28 +21,20 @@ public partial class MainWindow : Window
         vm?.LoadExternalResources();
     }
 
-    private void OnClosing(object? sender, WindowClosingEventArgs e)
+    protected override void OnClosing(WindowClosingEventArgs e)
     {
-        foreach (var process in App.ChildProcesses)
+        if (e.CloseReason != WindowCloseReason.ApplicationShutdown &&
+            e.CloseReason != WindowCloseReason.OSShutdown)
         {
-            if (process == null)
-                continue;
-            
-            try
-            {
-                if (!process.HasExited)
-                {
-                    process.Kill();
-                    process.WaitForExit(500);
-                }
-            }
-            catch { }
-            finally
-            {
-                process.Dispose();
-            }
+            e.Cancel = true;
+            Hide();
         }
-
-        App.ChildProcesses.Clear();
+        else
+            base.OnClosing(e);
     }
+
+    //private void OnClosing(object? sender, WindowClosingEventArgs e)
+    //{
+    //    ExternalApplicationService.KillExistingProcesses("winws");
+    //}
 }

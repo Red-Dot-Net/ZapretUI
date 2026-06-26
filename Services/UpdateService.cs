@@ -13,7 +13,7 @@ public static class UpdateService
         if (storageProvider == null)
             return new Error("Ошибка инициализации приложения");
 
-        var basePath = App.DataStorageService.ExternalLibraryResources.FolderPath;
+        var basePath = App.ZapretFolderPath;
         if (string.IsNullOrEmpty(basePath))
         {
             return new Error("Ошибка: Путь к корневой папке не указан");

@@ -5,9 +5,8 @@ namespace ZapretUI.Models;
 
 public class ExternalLibraryResources
 {
-    public string FolderPath { get; set; } = string.Empty;
     public string SelectedStrategyName { get; set; } = string.Empty;
     public string CurrentSourceVersion { get; set; } = string.Empty;
-    public string DownloadFolderPath { get; set; } = string.Empty;
+    public string BestStrategy { get; set; } = string.Empty;
     public List<Strategy> Strategies { get; set; } = [];
 }

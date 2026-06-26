@@ -1,9 +1,13 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using ZapretUI.Services;
+using ZapretUI.Views;
 
 namespace ZapretUI.ViewModels
 {
@@ -48,12 +52,18 @@ namespace ZapretUI.ViewModels
             CurrentView = new ListsWindowViewModel();
         }
 
+        [RelayCommand]
+        private void SwitchToDiagnosticsWindow()
+        {
+            CurrentView = new DiagnosticsWindowViewModel();
+        }
+
         public async Task LoadExternalResources()
         {
             await _dataStorageService.LoadResources(Path.Combine(AppContext.BaseDirectory, App.SaveFileName));
             await Task.Delay(1000);
 
-            var basePath = _dataStorageService.ExternalLibraryResources.FolderPath;
+            var basePath = App.ZapretFolderPath;
             if (string.IsNullOrEmpty(basePath))
                 return;
 

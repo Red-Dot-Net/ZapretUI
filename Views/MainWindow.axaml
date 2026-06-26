@@ -14,8 +14,6 @@
         Background="#090e0f">
 
     <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-        to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
@@ -81,6 +79,17 @@
                             FontSize="22">Обновление</Button>
                 </Border>
                 <Border BorderBrush="#134c61"
+                        BorderThickness="0 0 0 2"
+                        Margin="5 10 5 0"
+                        Padding="0 0 0 10">
+                    <Button Command="{Binding SwitchToDiagnosticsWindowCommand}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            CornerRadius="10"
+                            Padding="5,10,5,10"
+                            FontSize="22">Диагностика</Button>
+                </Border>
+                <Border BorderBrush="#134c61"
                         BorderThickness="0"
                         Margin="5 10 5 0"
                         Padding="0 0 0 10">
@@ -118,6 +127,9 @@
                     </DataTemplate>
                     <DataTemplate DataType="vm:ListsWindowViewModel">
                         <views:ListsWindow />
+                    </DataTemplate>
+                    <DataTemplate DataType="vm:DiagnosticsWindowViewModel">
+                        <views:DiagnosticsWindow />
                     </DataTemplate>
                 </ContentControl.DataTemplates>
             </ContentControl>

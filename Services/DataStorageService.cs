@@ -27,12 +27,6 @@ public sealed class DataStorageService
         };
     }
 
-    public async Task SaveBasePath(string basePath)
-    {
-        ExternalLibraryResources.FolderPath = basePath;
-        await SaveResources(ExternalLibraryResources, Path.Combine(AppContext.BaseDirectory, App.SaveFileName));
-    }
-
     public async Task SaveStrategies(List<Strategy> strategies)
     {
         ExternalLibraryResources.Strategies = strategies;
@@ -51,9 +45,9 @@ public sealed class DataStorageService
         await SaveResources(ExternalLibraryResources, Path.Combine(AppContext.BaseDirectory, App.SaveFileName));
     }
 
-    public async Task SaveDownloadFolderPath(string path)
+    public async Task SaveBestStrategy(string bestStrategy)
     {
-        ExternalLibraryResources.DownloadFolderPath = path;
+        ExternalLibraryResources.BestStrategy = bestStrategy;
         await SaveResources(ExternalLibraryResources, Path.Combine(AppContext.BaseDirectory, App.SaveFileName));
     }
 
