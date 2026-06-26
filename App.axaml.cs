@@ -34,8 +34,7 @@ namespace ZapretUI
 
             DataContext = new ApplicationViewModel();
 
-            //AppFolderPath = AppContext.BaseDirectory;
-            AppFolderPath = "C:\\Users\\Adminka\\Desktop\\xxxv\\ZapretUI";
+            AppFolderPath = AppContext.BaseDirectory;
             AppFolderName = new DirectoryInfo(AppFolderPath).Name;
             ZapretFolderPath = new DirectoryInfo(AppFolderPath).Parent!.FullName;
 
