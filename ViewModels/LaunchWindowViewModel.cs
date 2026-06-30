@@ -1,5 +1,7 @@
+using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using ZapretUI.Services;
@@ -9,13 +11,8 @@ namespace ZapretUI.ViewModels;
 public partial class LaunchWindowViewModel : ViewModelBase
 {
     readonly DataStorageService _dataStorageService;
+    readonly WindowNotificationManager _notificationManager;
     static int _loadIndex = 0;
-
-    [ObservableProperty]
-    public partial object OperationResultMessage { get; set; }
-
-    [ObservableProperty]
-    public partial bool IsOperationResultBorderVisible { get; set; }
 
     [ObservableProperty]
     public partial string? SelectedStrategyName {  get; set; }
@@ -23,19 +20,21 @@ public partial class LaunchWindowViewModel : ViewModelBase
     public LaunchWindowViewModel()
     {
         _dataStorageService = App.DataStorageService;
-        OperationResultMessage = "";
+        _notificationManager = App.NotificationManager;
         SelectedStrategyName = "";
-        IsOperationResultBorderVisible = false;
     }
 
     [RelayCommand]
     private async Task Launch()
     {
-        IsOperationResultBorderVisible = true;
-
         if (string.IsNullOrWhiteSpace(_dataStorageService.ExternalLibraryResources?.SelectedStrategyName))
         {
-            OperationResultMessage = "Стратегия не выбрана";
+            _notificationManager.Show(new Notification()
+            {
+                Expiration = TimeSpan.FromSeconds(5),
+                Type = NotificationType.Error,
+                Message = "Стратегия не выбрана"
+            });
             return;
         }
 
@@ -44,20 +43,35 @@ public partial class LaunchWindowViewModel : ViewModelBase
 
         if (strategy == null)
         {
-            OperationResultMessage = "Некоректное имя выбранной стратегии";
+            _notificationManager.Show(new Notification()
+            {
+                Expiration = TimeSpan.FromSeconds(5),
+                Type = NotificationType.Error,
+                Message = "Некоректное имя выбранной стратегии"
+            });
             return;
         }
 
         var basePath = App.ZapretFolderPath;
         if (string.IsNullOrEmpty(basePath))
         {
-            OperationResultMessage = "Ошибка: Путь к корневой папке не указан";
+            _notificationManager.Show(new Notification()
+            {
+                Expiration = TimeSpan.FromSeconds(5),
+                Type = NotificationType.Error,
+                Message = "Ошибка: Путь к корневой папке не указан"
+            });
             return;
         }
 
         var launchProcessResult = await ExternalApplicationService.Launch(basePath, strategy);
-        
-        OperationResultMessage = launchProcessResult.Message;
+
+        _notificationManager.Show(new Notification()
+        {
+            Expiration = TimeSpan.FromSeconds(5),
+            Type = NotificationType.Success,
+            Message = launchProcessResult.Message
+        });
     }
 
     public async Task OnViewLoaded()

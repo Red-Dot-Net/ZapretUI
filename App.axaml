@@ -1,5 +1,6 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls"
              xmlns:vm="using:ZapretUI.ViewModels"
              x:Class="ZapretUI.App"
              x:DataType="vm:ApplicationViewModel"
@@ -11,8 +12,35 @@
         <local:ViewLocator/>
     </Application.DataTemplates>
 
+    <Application.Resources>
+        <converters:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
+
+        <Color x:Key="MainColor_0">#151515</Color>
+        <Color x:Key="MainColor_1">#1E1E2E</Color>
+        <Color x:Key="MainColor_2">#10242b</Color>
+        <Color x:Key="MainColor_3">#134c61</Color>
+        <Color x:Key="MainColor_4">#13799e</Color>
+
+        <Color x:Key="TextColor_0">white</Color>
+        <Color x:Key="TextColor_1">#F5E0DC</Color>
+
+        <SolidColorBrush x:Key="RadioButtonOuterEllipseStroke" Color="White"/>
+        <SolidColorBrush x:Key="RadioButtonOuterEllipseFill" Color="#134c61"/>
+    </Application.Resources>
+
     <Application.Styles>
         <FluentTheme />
+
+        <Style Selector="NotificationCard">
+            <Setter Property="Background" Value="{DynamicResource MainColor_1}"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BorderBrush" Value="#45475A"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="NotificationCard TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextColor_0}"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
     </Application.Styles>
 
     <TrayIcon.Icons>

@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Controls.Notifications;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
@@ -14,21 +15,15 @@ namespace ZapretUI.ViewModels;
 public partial class DiagnosticsWindowViewModel : ViewModelBase
 {
     private readonly DataStorageService _dataStorageService;
+    private readonly WindowNotificationManager _notificationManager;
 
     [ObservableProperty]
     public partial string? BestStrategyName {  get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial string? TextInfo { get; set; } = string.Empty;
-
-    [ObservableProperty]
-    public partial bool IsTextInfoVisible { get; set; }
-
     public DiagnosticsWindowViewModel()
     {
         _dataStorageService = App.DataStorageService;
-
-        IsTextInfoVisible = false;
+        _notificationManager = App.NotificationManager;
     }
 
     public async Task OnLoadWindow()
@@ -46,8 +41,12 @@ public partial class DiagnosticsWindowViewModel : ViewModelBase
             var filePaths = Directory.GetFiles(dirPath);
             if (filePaths == null || filePaths.Length == 0)
             {
-                IsTextInfoVisible = true;
-                TextInfo = "Диагностика еще ни разу не проводилась. Файл с результатами отсутствует.";
+                _notificationManager.Show(new Notification()
+                {
+                    Expiration = TimeSpan.FromSeconds(5),
+                    Type = NotificationType.Error,
+                    Message = "Диагностика еще ни разу не проводилась. Файл с результатами отсутствует."
+                });
                 return;
             }
 
@@ -64,29 +63,49 @@ public partial class DiagnosticsWindowViewModel : ViewModelBase
                 var bestStrategy = await GetBestStrategyFromFile(correctTypeFilePaths[0]);
                 if (bestStrategy == null)
                 {
-                    IsTextInfoVisible = true;
-                    TextInfo = "Ошибка чтения файла диагностики.";
+                    _notificationManager.Show(new Notification()
+                    {
+                        Expiration = TimeSpan.FromSeconds(5),
+                        Type = NotificationType.Error,
+                        Message = "Ошибка чтения файла диагностики."
+                    });
                     return;
                 }
 
                 await _dataStorageService.SaveBestStrategy(bestStrategy);
                 BestStrategyName = bestStrategy;
+
+                _notificationManager.Show(new Notification()
+                {
+                    Expiration = TimeSpan.FromSeconds(5),
+                    Message = "Успешно найдено",
+                    Type = NotificationType.Success,
+                });
+
                 return;
             }
 
             int latestFileIndex = GetLatestFileIndex(correctTypeFilePaths);
             if (latestFileIndex < 0)
             {
-                IsTextInfoVisible = true;
-                TextInfo = "Ошибка чтения файла диагностики.";
+                _notificationManager.Show(new Notification()
+                {
+                    Expiration = TimeSpan.FromSeconds(5),
+                    Type = NotificationType.Error,
+                    Message = "Ошибка чтения файла диагностики."
+                });
                 return;
             }
 
             var bestStrategy2 = await GetBestStrategyFromFile(correctTypeFilePaths[latestFileIndex]);
             if (bestStrategy2 == null)
             {
-                IsTextInfoVisible = true;
-                TextInfo = "Ошибка чтения файла диагностики.";
+                _notificationManager.Show(new Notification()
+                {
+                    Expiration = TimeSpan.FromSeconds(5),
+                    Type = NotificationType.Error,
+                    Message = "Ошибка чтения файла диагностики."
+                });
                 return;
             }
 
@@ -104,8 +123,12 @@ public partial class DiagnosticsWindowViewModel : ViewModelBase
             var scriptPath = Path.Combine(App.ZapretFolderPath, "utils\\test zapret.ps1");
             if (!File.Exists(scriptPath))
             {
-                IsTextInfoVisible = true;
-                TextInfo = "Скрипт диагностики не найден.";
+                _notificationManager.Show(new Notification()
+                    {
+                    Expiration = TimeSpan.FromSeconds(5),    
+                    Type = NotificationType.Error,
+                        Message = "Скрипт диагностики не найден."
+                });
                 return;
             }
 
@@ -114,6 +137,7 @@ public partial class DiagnosticsWindowViewModel : ViewModelBase
                 FileName = "powershell.exe",
                 Arguments = $"-NoProfile -ExecutionPolicy Bypass -File \"{scriptPath}\"",
                 UseShellExecute = true,
+                Verb = "runas",
                 WindowStyle = ProcessWindowStyle.Normal
             };
 
@@ -122,8 +146,12 @@ public partial class DiagnosticsWindowViewModel : ViewModelBase
         }
         catch
         {
-            IsTextInfoVisible = true;
-            TextInfo = "Ошибка запуска файла диагностики.";
+            _notificationManager.Show(new Notification()
+            {
+                Expiration = TimeSpan.FromSeconds(5),
+                Type = NotificationType.Error,
+                Message = "Ошибка запуска файла диагностики."
+            });
             return;
         }
     }
@@ -146,22 +174,34 @@ public partial class DiagnosticsWindowViewModel : ViewModelBase
             string[] nameStrings = fileNames[i].Split('_');
             if (nameStrings.Length < 4)
             {
-                IsTextInfoVisible = true;
-                TextInfo = "Диагностика еще ни разу не проводилась. Файл с результатами отсутствует.";
+                _notificationManager.Show(new Notification()
+                {
+                    Expiration = TimeSpan.FromSeconds(5),
+                    Type = NotificationType.Error,
+                    Message = "Диагностика еще ни разу не проводилась. Файл с результатами отсутствует."
+                });
                 return -1;
             }
 
             if (!DateOnly.TryParseExact(nameStrings[2], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
             {
-                IsTextInfoVisible = true;
-                TextInfo = "Ошибка определения даты проведения диагностики.";
+                _notificationManager.Show(new Notification()
+                {
+                    Expiration = TimeSpan.FromSeconds(5),
+                    Type = NotificationType.Error,
+                    Message = "Ошибка определения даты проведения диагностики."
+                });
                 return -1;
             }
 
             if (!TimeOnly.TryParseExact(nameStrings[3], "HH-mm-ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out var time))
             {
-                IsTextInfoVisible = true;
-                TextInfo = "Ошибка определения времени проведения диагностики.";
+                _notificationManager.Show(new Notification()
+                {
+                    Expiration = TimeSpan.FromSeconds(5),
+                    Type = NotificationType.Error,
+                    Message = "Ошибка определения времени проведения диагностики."
+                });
                 return -1;
             }
 
@@ -199,8 +239,12 @@ public partial class DiagnosticsWindowViewModel : ViewModelBase
             var words = lastLine.Split(':');
             if (words.Length < 2)
             {
-                IsTextInfoVisible = true;
-                TextInfo = "Ошибка чтения файла диагностики.";
+                _notificationManager.Show(new Notification()
+                {
+                    Expiration = TimeSpan.FromSeconds(5),
+                    Type = NotificationType.Error,
+                    Message = "Ошибка чтения файла диагностики."
+                });
                 return string.Empty;
             }
 
@@ -208,8 +252,12 @@ public partial class DiagnosticsWindowViewModel : ViewModelBase
         }
         catch 
         {
-            IsTextInfoVisible = true;
-            TextInfo = "Ошибка чтения файла диагностики.";
+            _notificationManager.Show(new Notification()
+            {
+                Expiration = TimeSpan.FromSeconds(5),
+                Type = NotificationType.Error,
+                Message = "Ошибка чтения файла диагностики."
+            });
             return string.Empty;
         }
     }

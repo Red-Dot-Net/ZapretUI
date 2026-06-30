@@ -5,97 +5,163 @@
              x:DataType="vm:SettingsWindowViewModel">
 
     <UserControl.Styles>
-        <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="#cacfcc"/>
-            <Setter Property="Background" Value="#cacfcc" />
-        </Style>
-        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#cacfcc"/>
-            <Setter Property="BorderBrush" Value="#cacfcc"/>
-            <Setter Property="BorderThickness" Value="0" />
-        </Style>
-
         <Style Selector="Button">
-            <Setter Property="Background" Value="#115169" />
-            <Setter Property="Foreground" Value="white" />
+            <Setter Property="Background" Value="{DynamicResource MainColor_3}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextColor_0}" />
         </Style>
         <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#13799e" />
-            <Setter Property="TextBlock.Foreground" Value="White" />
+            <Setter Property="Background" Value="{DynamicResource MainColor_4}" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource TextColor_0}" />
         </Style>
 
         <Style Selector="CheckBox:unchecked /template/ Border#NormalRectangle">
-            <Setter Property="Background" Value="#102a33"/>
-            <Setter Property="BorderBrush" Value="#13799e"/>
+            <Setter Property="Background" Value="{DynamicResource MainColor_2}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource TextColor_0}"/>
         </Style>
         <Style Selector="CheckBox:checked /template/ Border#NormalRectangle">
-            <Setter Property="Background" Value="#13799e"/>
-            <Setter Property="BorderBrush" Value="#13799e"/>
+            <Setter Property="Background" Value="{DynamicResource MainColor_4}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource TextColor_0}"/>
         </Style>
         <Style Selector="CheckBox:pointerover /template/ Border#NormalRectangle">
-            <Setter Property="BorderBrush" Value="#13799e" />
-            <Setter Property="Background" Value="#13799e" />
+            <Setter Property="Background" Value="{DynamicResource MainColor_4}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource TextColor_0}" />
         </Style>
-         <Style Selector="CheckBox:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Foreground" Value="white" />
+        <Style Selector="CheckBox:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="{DynamicResource TextColor_0}" />
+        </Style>
+
+        <Style Selector="RadioButton">
+            <Setter Property="Foreground" Value="{DynamicResource TextColor_0}"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <!-- Checked inner circle -->
+        <Style Selector="RadioButton:checked /template/ Ellipse#CheckOuterEllipse">
+            <Setter Property="Fill" Value="{DynamicResource MainColor_3}"/>
+            <Setter Property="Stroke" Value="{DynamicResource TextColor_0}"/>
+        </Style>
+        <!-- Pointover Text -->
+        <Style Selector="RadioButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="{DynamicResource MainColor_4}"/>
+        </Style>
+        <!-- Pointover inner circle -->
+        <Style Selector="RadioButton:pointerover /template/ Ellipse#OuterEllipse">
+            <Setter Property="Fill" Value="{DynamicResource MainColor_4}"/>
+            <Setter Property="Stroke" Value="{DynamicResource TextColor_0}"/>
+        </Style>
+        <!-- Pointover checked inner circle -->
+        <Style Selector="RadioButton:pointerover /template/ Ellipse#CheckOuterEllipse">
+            <Setter Property="Fill" Value="{DynamicResource MainColor_4}"/>
+            <Setter Property="Stroke" Value="{DynamicResource TextColor_0}"/>
+        </Style>
+
+        <Style Selector="Separator">
+            <Setter Property="Background" Value="{DynamicResource MainColor_4}"/>
+            <Setter Property="Height" Value="2"/>
         </Style>
     </UserControl.Styles>
 
-    <StackPanel Margin="40 20 40 20">
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Выбрана стратегия:"
+    <ScrollViewer>
+        <StackPanel Margin="40 20 40 20">
+            <TextBlock Text="Выбранная стратегия"
+                       HorizontalAlignment="Center"
+                       Margin="0 20 0 10"
+                       FontSize="20"
                        FontWeight="Bold"
-                       FontSize="18"
-                       Foreground="White"/>
+                       Foreground="{DynamicResource TextColor_0}"/>
             <TextBlock Margin="20 0 0 0"
+                       HorizontalAlignment="Center"
                        FontSize="18"
                        Text="{Binding SelectedStrategyNameDisplay}"
-                       Foreground="White"/>
-        </StackPanel>
-        <Button Command="{Binding ScanAndSaveStrategiesCommand}"
-                Content="Загрузить стратегии"
-                Margin="0 20 0 0"
-                Padding="10"
-                FontSize="18"
-                HorizontalAlignment="Center"/>
-        <TextBlock Text="Загруженные стратегии:"
-                   FontWeight="Bold"
-                   Foreground="White"/>
-        <Border Margin="0 20 0 0"
-                MaxHeight="250"
-                Width="450"
-                HorizontalAlignment="Left"
-                CornerRadius="3"
-                BorderBrush="#134c61"
-                BorderThickness="2">
-            <ScrollViewer VerticalScrollBarVisibility="Visible"
-                          HorizontalScrollBarVisibility="Hidden">
+                       Foreground="{DynamicResource TextColor_0}"/>
+            <Separator Margin="0 20 0 0"/>
+            <TextBlock Text="Стратегии"
+                       HorizontalAlignment="Center"
+                       Margin="0 20 0 10"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource TextColor_0}"/>
+            <Button Command="{Binding ScanAndSaveStrategiesCommand}"
+                    Content="Загрузить стратегии"
+                    Margin="0 20 0 0"
+                    Padding="10"
+                    FontSize="18"
+                    HorizontalAlignment="Center"/>
+            <TextBlock Text="Загруженные стратегии:"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource TextColor_0}"/>
+            <Border Margin="0 20 0 0"
+                    MaxHeight="250"
+                    Width="450"
+                    HorizontalAlignment="Left"
+                    CornerRadius="3"
+                    BorderBrush="{DynamicResource MainColor_3}"
+                    BorderThickness="2">
+                <ScrollViewer VerticalScrollBarVisibility="Visible"
+                              HorizontalScrollBarVisibility="Hidden">
 
-                <ScrollViewer.Styles>
-                    <Style Selector="ScrollViewer">
-                        <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
-                        <Setter Property="ScrollViewer.IsScrollInertiaEnabled" Value="False" />
-                    </Style>
-                </ScrollViewer.Styles>
+                    <ScrollViewer.Styles>
+                        <Style Selector="ScrollViewer">
+                            <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
+                            <Setter Property="ScrollViewer.IsScrollInertiaEnabled" Value="False" />
+                        </Style>
+                    </ScrollViewer.Styles>
 
 
-                <ListBox ItemsSource="{Binding StrategyNames}"
-                         SelectedItem="{Binding SelectedStrategyName, Mode=TwoWay}"
-                         Background="#102a33"
-                         >
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding}"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </ScrollViewer>
-        </Border>
+                    <ListBox ItemsSource="{Binding StrategyNames}"
+                             SelectedItem="{Binding SelectedStrategyName, Mode=TwoWay}"
+                             Background="{DynamicResource MainColor_2}"
+                             >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+            </Border>
+            <Separator Margin="0 20 0 0"/>
+            <TextBlock Text="Обновления"
+                       HorizontalAlignment="Center"
+                       Margin="0 20 0 10"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource TextColor_0}"/>
             <CheckBox Content="Проверять обновления"
                       IsChecked="{Binding IsUpdateChackActive}"
                       Margin="0 20 0 0"
                       FontSize="18"
-                      Foreground="White"
+                      Foreground="{DynamicResource TextColor_0}"
                       VerticalAlignment="Center"/>
-    </StackPanel>
+            <Separator Margin="0 20 0 0"/>
+            <TextBlock Text="Game Filter"
+                       HorizontalAlignment="Center"
+                       Margin="0 20 0 10"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource TextColor_0}"/>
+            <RadioButton GroupName="GameFilterMode"
+                         Content="Отключен"
+                         IsChecked="{Binding GameFilterStatus,
+                         Converter={StaticResource EnumToBoolConverter},
+                         ConverterParameter={x:Static vm:GameFilterStatus.Disabled}}"/>
+            <RadioButton GroupName="GameFilterMode"
+                         Content="Включен"
+                         IsChecked="{Binding GameFilterStatus,
+                         Converter={StaticResource EnumToBoolConverter},
+                         ConverterParameter={x:Static vm:GameFilterStatus.All}}"
+                         Foreground="{DynamicResource TextColor_0}"/>
+            <RadioButton GroupName="GameFilterMode"
+                         Content="Только TCP"
+                         IsChecked="{Binding GameFilterStatus,
+                         Converter={StaticResource EnumToBoolConverter},
+                         ConverterParameter={x:Static vm:GameFilterStatus.TCP}}"/>
+            <RadioButton GroupName="GameFilterMode"
+                         Content="Только UDP"
+                         IsChecked="{Binding GameFilterStatus,
+                         Converter={StaticResource EnumToBoolConverter},
+                         ConverterParameter={x:Static vm:GameFilterStatus.UDP}}"/>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

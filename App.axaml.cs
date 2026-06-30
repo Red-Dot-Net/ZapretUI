@@ -1,7 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,7 @@ namespace ZapretUI
     public partial class App : Application
     {
         public static TopLevel? AppTopLevel { get; private set; }
+        public static WindowNotificationManager NotificationManager { get; private set; } = null!;
         public static string ZapretFolderPath { get; private set; } = string.Empty;
         public static string AppFolderName { get; private set; } = string.Empty;
         public static string AppFolderPath { get; private set; } = string.Empty;
@@ -36,7 +39,8 @@ namespace ZapretUI
 
             AppFolderPath = AppContext.BaseDirectory;
             AppFolderName = new DirectoryInfo(AppFolderPath).Name;
-            ZapretFolderPath = new DirectoryInfo(AppFolderPath).Parent!.FullName;
+            //ZapretFolderPath = new DirectoryInfo(AppFolderPath).Parent!.FullName;
+            ZapretFolderPath = "C:\\Users\\Adminka\\Desktop\\xxxv";
 
             var handler = new SocketsHttpHandler
             {
@@ -64,6 +68,11 @@ namespace ZapretUI
                 };
 
                 AppTopLevel = TopLevel.GetTopLevel(desktop.MainWindow);
+                NotificationManager = new(AppTopLevel)
+                {
+                    MaxItems = 3,
+                    Position = NotificationPosition.BottomCenter,
+                };
             }
             
             base.OnFrameworkInitializationCompleted();

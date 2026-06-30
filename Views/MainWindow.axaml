@@ -11,7 +11,7 @@
         Title="ZapretUI"
         Width="1000"
         Height="520"
-        Background="#090e0f">
+        Background="{DynamicResource MainColor_0}">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
@@ -24,29 +24,32 @@
         </Grid.ColumnDefinitions>
         <Grid.Styles>
             <Style Selector="Button">
-                <Setter Property="Background" Value="#115169"></Setter>
-                <Setter Property="Foreground" Value="White"></Setter>
+                <Setter Property="Background" Value="{DynamicResource MainColor_3}"></Setter>
+                <Setter Property="Foreground" Value="{DynamicResource TextColor_0}"></Setter>
             </Style>
             <Style Selector="TextBlock">
-                <Setter Property="Foreground" Value="White"></Setter>
+                <Setter Property="Foreground" Value="{DynamicResource TextColor_0}"></Setter>
             </Style>
 
         </Grid.Styles>
         <Border Grid.Column="0"
                 CornerRadius="0,2,2,0"
-                BorderBrush="#10242b"
+                BorderBrush="{DynamicResource MainColor_2}"
                 BorderThickness="3"
                 Width="200"
                 HorizontalAlignment="Left">
-            <StackPanel Background="#10242b">
+            <StackPanel Background="{DynamicResource MainColor_2}">
                 <StackPanel.Styles>
                     <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
                         <Setter Property="Background" Value="#13799e" />
                         <Setter Property="Foreground" Value="white" />
                     </Style>
+
+                    <Style Selector="Border">
+                        <Setter Property="BorderBrush" Value="{DynamicResource MainColor_3}" />
+                    </Style>
                 </StackPanel.Styles>
-                <Border BorderBrush="#134c61"
-                        BorderThickness="0 0 0 2"
+                <Border BorderThickness="0 0 0 2"
                         Margin="5 10 5 0"
                         Padding="0 0 0 10">
                     <Button Command="{Binding SwitchToLaunchWindowCommand}"
@@ -56,8 +59,7 @@
                             Padding="5,10,5,10"
                             FontSize="22">Запуск</Button>
                 </Border>
-                <Border BorderBrush="#134c61"
-                        BorderThickness="0,0,0,2"
+                <Border BorderThickness="0,0,0,2"
                         Margin="5 10 5 0"
                         Padding="0 0 0 10">
                     <Button Command="{Binding SwitchToSettingWindowCommand}"
@@ -67,8 +69,7 @@
                             Padding="5,10,5,10"
                             FontSize="22">Настройки</Button>
                 </Border>
-                <Border BorderBrush="#134c61"
-                        BorderThickness="0,0,0,2"
+                <Border BorderThickness="0,0,0,2"
                         Margin="5 10 5 0"
                         Padding="0 0 0 10">
                     <Button Command="{Binding SwitchToUpdateWindowCommand}"
@@ -78,8 +79,7 @@
                             Padding="5,10,5,10"
                             FontSize="22">Обновление</Button>
                 </Border>
-                <Border BorderBrush="#134c61"
-                        BorderThickness="0 0 0 2"
+                <Border BorderThickness="0 0 0 2"
                         Margin="5 10 5 0"
                         Padding="0 0 0 10">
                     <Button Command="{Binding SwitchToDiagnosticsWindowCommand}"
@@ -89,8 +89,7 @@
                             Padding="5,10,5,10"
                             FontSize="22">Диагностика</Button>
                 </Border>
-                <Border BorderBrush="#134c61"
-                        BorderThickness="0"
+                <Border BorderThickness="0"
                         Margin="5 10 5 0"
                         Padding="0 0 0 10">
                     <Button Command="{Binding SwitchToListsWindowCommand}"

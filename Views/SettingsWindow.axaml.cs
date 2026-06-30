@@ -13,13 +13,13 @@ public partial class SettingsWindow : UserControl
         DataContext = new SettingsWindowViewModel();
     }
 
-    protected override void OnLoaded(RoutedEventArgs e)
+    protected override async void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
 
         if (DataContext is not SettingsWindowViewModel vm)
             return;
 
-        vm.OnViewLoaded();
+        await vm.OnViewLoaded();
     }
 }

@@ -6,23 +6,23 @@
 
     <UserControl.Styles>
         <Style Selector="Button">
-            <Setter Property="Background" Value="#115169" />
-            <Setter Property="Foreground" Value="white" />
+            <Setter Property="Background" Value="{DynamicResource MainColor_3}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextColor_0}" />
         </Style>
         <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#13799e" />
-            <Setter Property="TextBlock.Foreground" Value="White" />
+            <Setter Property="Background" Value="{DynamicResource MainColor_3}" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource TextColor_0}" />
         </Style>
         <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="#115169"/>
-            <Setter Property="Background" Value="#115169"/>
-            <Setter Property="TextBlock.Foreground" Value="white"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource MainColor_3}"/>
+            <Setter Property="Background" Value="{DynamicResource MainColor_3}"/>
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource TextColor_0}"/>
         </Style>
         <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#115169"/>
-            <Setter Property="BorderBrush" Value="#115169"/>
+            <Setter Property="Background" Value="{DynamicResource MainColor_3}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource MainColor_3}"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="TextBlock.Foreground" Value="white"/>
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource TextColor_0}"/>
         </Style>
     </UserControl.Styles>
 
@@ -49,7 +49,7 @@
             <Border IsVisible="{Binding IsDownloadPanelVisible}"
                     CornerRadius="5"
                     BorderThickness="3"
-                    BorderBrush="#115169"
+                    BorderBrush="{DynamicResource MainColor_3}"
                     Padding="2">
                 <StackPanel>
                     <HyperlinkButton Content="Ссылка на скачивание архива"
@@ -57,21 +57,21 @@
                                      HorizontalAlignment="Center"
                                      Margin="0 5 0 0"
                                      FontSize="20"
-                                     Foreground="white"/>
+                                     Foreground="{DynamicResource TextColor_0}"/>
                     <TextBlock Text="{Binding DownloadUrl}"
                                HorizontalAlignment="Center"
                                FontSize="12"
-                               Foreground="#13799e"/>
+                               Foreground="{DynamicResource MainColor_3}"/>
                 </StackPanel>
             </Border>
             <Border IsVisible="{Binding IsDownloadPanelVisible}"
                     Height="150"
-                    Background="#115169"
+                    Background="{DynamicResource MainColor_3}"
                     Padding="40"
                     Margin="0 20 0 0"
                     BorderThickness="3"
                     CornerRadius="10"
-                    BorderBrush="#13799e"
+                    BorderBrush="{DynamicResource MainColor_3}"
                     DragDrop.AllowDrop="True"
                     DragDrop.DragOver="OnDragOver"
                     DragDrop.Drop="OnDrop">
@@ -81,18 +81,18 @@
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                FontSize="18"
-                               Foreground="white"/>
+                               Foreground="{DynamicResource TextColor_0}"/>
                     <TextBlock x:Name="DragAndDropFileNameBlock"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                IsVisible="False"
                                FontSize="18"
-                               Foreground="white"/>
+                               Foreground="{DynamicResource TextColor_0}"/>
                 </StackPanel>
             </Border>
             <Border IsVisible="{Binding IsInfoTextVisible}"
                     BorderThickness="3"
-                    BorderBrush="#13799e"
+                    BorderBrush="{DynamicResource MainColor_3}"
                     CornerRadius="3">
                 <TextBlock Text="{Binding InfoText}"
                            Margin="5"
@@ -115,13 +115,13 @@
                     FontSize="16"/>
             <Border IsVisible="{Binding IsUpdateListInfoVisible}"
                     BorderThickness="3"
-                    BorderBrush="#13799e"
-                    Background="#115169"
+                    BorderBrush="{DynamicResource MainColor_3}"
+                    Background="{DynamicResource MainColor_3}"
                     CornerRadius="3"
                     Padding="10">
                 <TextBlock Text="{Binding UpdateListInfo}"
                            TextWrapping="Wrap"
-                           Foreground="White"/>
+                           Foreground="{DynamicResource TextColor_0}"/>
             </Border>
             <Button Command="{Binding UpdateListCommand}"
                     IsVisible="{Binding IsUpdateListButtonVisible}"
